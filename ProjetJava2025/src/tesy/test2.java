@@ -1,0 +1,5 @@
+package tesy;
+
+public class test2 {
+private int truc;
+}
