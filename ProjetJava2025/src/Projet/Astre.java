@@ -107,4 +107,7 @@ public abstract class Astre {
     public Doublet<Vecteur, Vecteur> getEtat() {
         return etat;
     }
+
+//test 2
+
 }
