@@ -7,9 +7,6 @@ public class Vecteur {
 	private double z;
 	private double angle;
 	private double norme;
-
-
-
 	private Point pointApplication;
 
 	//Vecteurs avec des coords
@@ -59,7 +56,7 @@ public class Vecteur {
 		return this.norme;
 	}
 
-	/* ===== Angle (dans le plan XY) ===== */
+	//Angle (dans le plan XY)
 	public double getAngle() {
 		return this.angle;
 	}
