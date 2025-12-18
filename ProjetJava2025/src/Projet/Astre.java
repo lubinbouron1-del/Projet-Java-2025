@@ -15,8 +15,8 @@ public abstract class Astre {
     private Doublet<Vecteur, Vecteur> etat;
 
     // Trajectoire
-    private ArrayList<Integer> trajectoireX;
-    private ArrayList<Integer> trajectoireY;
+    private ArrayList<Double> trajectoireX;
+    private ArrayList<Double> trajectoireY;
 
     //Constructeur
     public Astre(double masse, double rayon, Vecteur positionInitiale, Vecteur vitesseInitiale) {
@@ -32,22 +32,22 @@ public abstract class Astre {
         this.trajectoireY = new ArrayList<>();
 
         // Position initiale
-        trajectoireX.add((int) positionInitiale.getX());
-        trajectoireY.add((int) positionInitiale.getY());
+        trajectoireX.add((Double) positionInitiale.getX());
+        trajectoireY.add((Double) positionInitiale.getY());
     }
 
     //Trajectoire
-    public ArrayList<Integer> trajectoireX() {
+    public ArrayList<Double> trajectoireX() {
         return trajectoireX;
     }
 
-    public ArrayList<Integer> trajectoireY() {
+    public ArrayList<Double> trajectoireY() {
         return trajectoireY;
     }
 
     protected void ajouterPointTrajectoire(Vecteur position) {
-        trajectoireX.add((int) position.getX());
-        trajectoireY.add((int) position.getY());
+        trajectoireX.add((Double) position.getX());
+        trajectoireY.add((Double) position.getY());
     }
 
     //gestion des Forces
@@ -69,7 +69,7 @@ public abstract class Astre {
         Vecteur position = etat.getPremier();
         Vecteur vitesse  = etat.getSecond();
 
-        // a = F / m
+        // a = F / m ( Principe fondamental de la dynamique)
         Vecteur acceleration = sommeForces().multiply(1.0 / masse);
 
         // v(t+dt)
@@ -88,7 +88,7 @@ public abstract class Astre {
         forces.clear();
     }
 
-    //Methodes Abstrates
+    //Methodes Abstraites
     public abstract void affiche();
 
     //getters
