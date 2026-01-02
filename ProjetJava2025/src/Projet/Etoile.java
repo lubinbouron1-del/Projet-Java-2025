@@ -1,67 +1,54 @@
 package Projet;
 
+import java.util.List;
+
 public class Etoile extends Astre {
 
-    // Constante gravitationnelle (à adapter à ton système d’unités)
-    private static final double G = 6.67430e-11;
+    private static final double G = 6.67430e-11; // Constante gravitationnelle
 
-    /**
-     * Constructeur d'une étoile (astre attracteur fixe)
-     */
-    public Etoile(double masse, double rayon, Vecteur position) {
-        // vitesse initiale nulle
-        super(masse, rayon, position, new Vecteur(0, 0, 0));
+    /* ===== Constructeur ===== */
+    public Etoile(double masse, double rayon, Vecteur positionInitiale) {
+        super(masse, rayon, positionInitiale, new Vecteur(0, 0, 0));
     }
 
-    /**
-     * Calcule la force gravitationnelle exercée par l'étoile sur un autre astre
-     * selon la loi de Newton
-     */
-    public Vecteur forceAttraction(Astre autre) {
+    /* ===== Force gravitationnelle ===== */
+    @Override
+    public Vecteur forceGravitationnelle(Astre autre) {
+        Vecteur posEtoile = this.getEtat().getPosition();
+        Vecteur posAutre  = autre.getEtat().getPosition();
 
-        Vecteur posEtoile = this.getEtat().getPremier();
-        Vecteur posAutre  = autre.getEtat().getPremier();
+        // Vecteur distance
+        Vecteur r = new Vecteur(
+            posAutre.getX() - posEtoile.getX(),
+            posAutre.getY() - posEtoile.getY(),
+            posAutre.getZ() - posEtoile.getZ()
+        );
 
-        // Composantes du vecteur distance r = etoile -> autre
-        double dx = posAutre.getX() - posEtoile.getX();
-        double dy = posAutre.getY() - posEtoile.getY();
-        double dz = posAutre.getZ() - posEtoile.getZ();
+        double distance = r.norme();
 
-        Vecteur r = new Vecteur(dx, dy, dz);
-        double distance = r.getNorme();
+        if (distance == 0) return new Vecteur(0, 0, 0); // Sécurité
 
-        // Sécurité numérique (évite division par zéro)
-        if (distance == 0) {
-            return new Vecteur(0, 0, 0);
-        }
-
-        // Intensité de la force gravitationnelle
-        double intensite = G * this.getMasse() * autre.getMasse()
-                         / (distance * distance);
+        // Intensité F = G*m1*m2 / r²
+        double intensite = G * this.getMasse() * autre.getMasse() / (distance * distance);
 
         // Vecteur unitaire u = r / ||r||
-        Vecteur u = r.multiply(1.0 / distance);
+        Vecteur u = r.normalize();
 
-        // Force exercée sur l'astre "autre" (dirigée vers l'étoile)
+        // Force dirigée vers l'étoile
         return u.multiply(-intensite);
     }
 
-    /**
-     * L'étoile est supposée fixe : son mouvement est négligé
-     */
+    /* ===== Update ===== */
     @Override
-    public void update(double dt) {
-        // volontairement vide
+    public void update(double dt, List<Astre> autres) {
+        // Si on veut l'étoile fixe, on laisse vide
+        // Pour N-corps réaliste, on pourrait calculer forces et update position
     }
 
+    /* ===== Affichage ===== */
     @Override
     public void affiche() {
-        System.out.println(
-            "Étoile : masse = " + getMasse()
-            + ", position = (" 
-            + getEtat().getPremier().getX() + ", "
-            + getEtat().getPremier().getY() + ", "
-            + getEtat().getPremier().getZ() + ")"
-        );
+        System.out.println("Étoile : masse=" + getMasse() + ", rayon=" + getRayon()
+                + ", position=" + getEtat().getPosition());
     }
 }
