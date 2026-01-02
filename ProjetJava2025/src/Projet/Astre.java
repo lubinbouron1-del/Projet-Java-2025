@@ -1,56 +1,52 @@
 package Projet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Astre {
 
     /* ===== Attributs ===== */
-    private double rayon;
     private double masse;
+    private double rayon;
 
-    private ArrayList<Vecteur> forces;
-    private int nbPoints;
+    private EtatMecanique etat;                // Position et vitesse
+    private ArrayList<Vecteur> trajectoire;    // Historique pour affichage
+    private ArrayList<Vecteur> forces;         // Forces appliquées
+    private int nbPoints;                       // Nombre de points de trajectoire
 
-    // Position et vitesse de l'astre à un instant t
-    private Doublet<Vecteur, Vecteur> etat;
+    private List<Astre> satellites;            // Satellites orbitant autour de l'astre
 
-    // Trajectoire
-    private ArrayList<Double> trajectoireX;
-    private ArrayList<Double> trajectoireY;
-
-    //Constructeur
+    /* ===== Constructeur ===== */
     public Astre(double masse, double rayon, Vecteur positionInitiale, Vecteur vitesseInitiale) {
-                
         this.masse = masse;
         this.rayon = rayon;
+        this.etat = new EtatMecanique(positionInitiale, vitesseInitiale);
+        this.trajectoire = new ArrayList<>();
+        trajectoire.add(positionInitiale);
         this.forces = new ArrayList<>();
+        this.satellites = new ArrayList<>();
         this.nbPoints = 0;
-
-        this.etat = new Doublet<>(positionInitiale, vitesseInitiale);
-
-        this.trajectoireX = new ArrayList<>();
-        this.trajectoireY = new ArrayList<>();
-
-        // Position initiale
-        trajectoireX.add((Double) positionInitiale.getX());
-        trajectoireY.add((Double) positionInitiale.getY());
     }
 
-    //Trajectoire
-    public ArrayList<Double> trajectoireX() {
-        return trajectoireX;
+    /* ===== Gestion des satellites ===== */
+    public void ajouterSatellite(Astre sat) {
+        satellites.add(sat);
     }
 
-    public ArrayList<Double> trajectoireY() {
-        return trajectoireY;
+    public List<Astre> getSatellites() {
+        return satellites;
+    }
+
+    /* ===== Trajectoire ===== */
+    public ArrayList<Vecteur> getTrajectoire() {
+        return trajectoire;
     }
 
     protected void ajouterPointTrajectoire(Vecteur position) {
-        trajectoireX.add((Double) position.getX());
-        trajectoireY.add((Double) position.getY());
+        trajectoire.add(position);
     }
 
-    //gestion des Forces
+    /* ===== Forces ===== */
     public void ajouterForce(Vecteur f) {
         forces.add(f);
     }
@@ -63,51 +59,49 @@ public abstract class Astre {
         return somme;
     }
 
-    //methode d'Euler pour approximer les positions
-    public void update(double dt) {
+    /* ===== Mise à jour physique (Euler) ===== */
+    // On fournit une liste d'autres astres pour calcul des forces gravitationnelles
+    public void update(double dt, List<Astre> autres) {
+        // Calcul des forces gravitationnelles provenant des autres astres
+        for (Astre autre : autres) {
+            if (autre != this) {
+                ajouterForce(autre.forceGravitationnelle(this));
+            }
+        }
 
-        Vecteur position = etat.getPremier();
-        Vecteur vitesse  = etat.getSecond();
+        // Euler
+        Vecteur position = etat.getPosition();
+        Vecteur vitesse  = etat.getVitesse();
 
-        // a = F / m ( Principe fondamental de la dynamique)
         Vecteur acceleration = sommeForces().multiply(1.0 / masse);
+        Vecteur nouvelleVitesse = vitesse.add(acceleration.multiply(dt));
+        Vecteur nouvellePosition = position.add(nouvelleVitesse.multiply(dt));
 
-        // v(t+dt)
-        vitesse = vitesse.add(acceleration.multiply(dt));
+        etat.setPosition(nouvellePosition);
+        etat.setVitesse(nouvelleVitesse);
 
-        // x(t+dt)
-        position = position.add(vitesse.multiply(dt));
-
-        // Mise à jour de l'état
-        etat = new Doublet<>(position, vitesse);
-
-        // Sauvegarde de la trajectoire
-        ajouterPointTrajectoire(position);
+        ajouterPointTrajectoire(nouvellePosition);
 
         nbPoints++;
         forces.clear();
+
+        // Update des satellites
+        for (Astre sat : satellites) {
+            sat.update(dt, autres);
+        }
     }
 
-    //Methodes Abstraites
+    /* ===== Méthodes abstraites ===== */
     public abstract void affiche();
 
-    //getters
-    public double getRayon() {
-        return rayon;
+    // À surcharger dans les sous-classes (ex: Etoile) si nécessaire
+    public Vecteur forceGravitationnelle(Astre autre) {
+        return new Vecteur(0, 0, 0); // Par défaut : aucune force
     }
 
-    public double getMasse() {
-        return masse;
-    }
-
-    public int getNbPoints() {
-        return nbPoints;
-    }
-
-    public Doublet<Vecteur, Vecteur> getEtat() {
-        return etat;
-    }
-
-//test 2
-
+    /* ===== Getters ===== */
+    public double getMasse() { return masse; }
+    public double getRayon() { return rayon; }
+    public int getNbPoints() { return nbPoints; }
+    public EtatMecanique getEtat() { return etat; }
 }
