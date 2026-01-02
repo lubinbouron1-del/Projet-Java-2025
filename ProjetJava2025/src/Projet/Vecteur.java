@@ -1,72 +1,79 @@
 package Projet;
 
 public class Vecteur {
+    private double x;
+    private double y;
+    private double z;
 
-	private double x;
-	private double y;
-	private double z;
-	private double angle;
-	private double norme;
-	private Point pointApplication;
+    // ----- Constructeurs -----
+    public Vecteur(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
-	//Vecteurs avec des coords
-	public Vecteur(double x, double y, double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.norme = Math.sqrt(x * x + y * y + z * z);
-		this.angle =  Math.atan2(y, x);
-	}
+    public Vecteur(double x, double y) {
+        this(x, y, 0.0);
+    }
 
-	//Vecteur avec 2 points
-	public Vecteur(Point p, Point q) {
-		this.pointApplication = p;
-		this.x = q.getX() - p.getX();
-		this.y = q.getY() - p.getY();
-		this.z = q.getZ() - p.getZ();
-		this.norme = Math.sqrt(x * x + y * y + z * z);
-		this.angle =  Math.atan2(y, x);
-	}
-	//vecteur avec angle
-	public Vecteur(Point p, double norme, double angle) {
-		this.pointApplication = p;
-		this.angle = angle; 
-		this.norme = norme;
-		this.x = norme * Math.cos(angle);
-		this.y = norme * Math.sin(angle);
-		this.z = 0;
+    // ----- Getters -----
+    public double getX() { return x; }
+    public double getY() { return y; }
+    public double getZ() { return z; }
 
-	}
+    // ----- Méthodes physiques -----
 
-	//Getters et Setters
-	public double getX() {
-		return x;
-	}
+    // Norme du vecteur
+    public double norme() {
+        return Math.sqrt(x*x + y*y + z*z);
+    }
 
-	public double getY() {
-		return y;
-	}
+    // Angle dans le plan XY
+    public double angleXY() {
+        return Math.atan2(y, x);
+    }
 
-	public double getZ() {
-		return z;
-	}
+    // Normalisation (vecteur unitaire)
+    public Vecteur normalize() {
+        double n = norme();
+        if (n == 0) return new Vecteur(0, 0, 0);
+        return this.multiply(1.0 / n);
+    }
 
+    // Produit scalaire avec un autre vecteur
+    public double dot(Vecteur v) {
+        return x*v.x + y*v.y + z*v.z;
+    }
 
-	public double getNorme() {
-		return this.norme;
-	}
+    // Produit vectoriel (utile en 3D)
+    public Vecteur cross(Vecteur v) {
+        return new Vecteur(
+            y*v.z - z*v.y,
+            z*v.x - x*v.z,
+            x*v.y - y*v.x
+        );
+    }
 
-	//Angle (dans le plan XY)
-	public double getAngle() {
-		return this.angle;
-	}
+    // Distance à un autre vecteur
+    public double distance(Vecteur v) {
+        return Math.sqrt(
+            (x - v.x)*(x - v.x) +
+            (y - v.y)*(y - v.y) +
+            (z - v.z)*(z - v.z)
+        );
+    }
 
+    // ----- Opérations immuables -----
+    public Vecteur add(Vecteur v) {
+        return new Vecteur(x + v.x, y + v.y, z + v.z);
+    }
 
-	public Vecteur add(Vecteur v) {
-		return new Vecteur(this.x + v.x, this.y + v.y, this.z + v.z);
-	}
+    public Vecteur multiply(double k) {
+        return new Vecteur(x * k, y * k, z * k);
+    }
 
-	public Vecteur multiply(double k) {
-		return new Vecteur(k * x, k * y, k * z);
-	}
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ", " + z + ")";
+    }
 }
