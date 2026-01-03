@@ -5,9 +5,8 @@ import java.util.Map;
 public class Planete extends Astre implements Habitable {
 
     private Map<String, Double> compositionAtmosphere; // % des gaz
-    private double pression;                            // en Pa
-    private double temperature;                         // en K
-    private boolean habitable;                          // calculé via méthode
+    private double pression;    // Pa
+    private double temperature; // K
 
     /* ===== Constructeur ===== */
     public Planete(double masse, double rayon,
@@ -21,24 +20,29 @@ public class Planete extends Astre implements Habitable {
         this.compositionAtmosphere = compositionAtmosphere;
         this.pression = pression;
         this.temperature = temperature;
-        this.habitable = estHabitable(); // calcul initial
     }
 
-    /* ===== Méthode d’habitalité simplifiée ===== */
+    /* ===== Habitabilité ===== */
     @Override
     public boolean estHabitable() {
-        if (temperature < 250 || temperature > 320) return false;
-        if (pression < 50000 || pression > 200000) return false;
 
-        double o2 = compositionAtmosphere.getOrDefault("O2", 0.0);
-        double n2 = compositionAtmosphere.getOrDefault("N2", 0.0);
+        boolean conditionsPhysiques =
+                temperature >= 250 && temperature <= 320 &&
+                pression >= 50_000 && pression <= 200_000;
 
-        return o2 > 15.0 && n2 > 50.0;
+        boolean atmosphereValide =
+                compositionAtmosphere.entrySet().stream()
+                        .filter(e -> e.getKey().equals("O2") || e.getKey().equals("N2"))
+                        .allMatch(e ->
+                                (e.getKey().equals("O2") && e.getValue() > 15.0) ||
+                                (e.getKey().equals("N2") && e.getValue() > 50.0)
+                        );
+
+        return conditionsPhysiques && atmosphereValide;
     }
 
     @Override
     public double graviteSurface() {
-        // g = G*M / R²
         final double G = 6.67430e-11;
         return G * getMasse() / (getRayon() * getRayon());
     }
@@ -48,31 +52,33 @@ public class Planete extends Astre implements Habitable {
         return temperature;
     }
 
-    /* ===== Surcharge force gravitationnelle si nécessaire ===== */
-    // Ici, la planète ne génère pas de forces par elle-même dans cette version
-    @Override
-    public Vecteur forceGravitationnelle(Astre autre) {
-        return new Vecteur(0, 0, 0); // pour l’instant, force calculée par Etoile
-    }
-
     /* ===== Update ===== */
     @Override
     public void update(double dt, java.util.List<Astre> autres) {
         super.update(dt, autres);
-        habitable = estHabitable(); // recalcul si conditions changent
     }
 
     /* ===== Affichage ===== */
     @Override
     public void affiche() {
-        System.out.println("Planète : masse=" + getMasse() + ", rayon=" + getRayon()
-                + ", position=" + getEtat().getPosition()
-                + ", habitable=" + habitable);
+        System.out.println(
+            "Planète : masse=" + getMasse() +
+            ", rayon=" + getRayon() +
+            ", position=" + getEtat().getPosition() +
+            ", habitable=" + estHabitable()
+        );
     }
 
     /* ===== Getters ===== */
-    public Map<String, Double> getCompositionAtmosphere() { return compositionAtmosphere; }
-    public double getPression() { return pression; }
-    public double getTemperature() { return temperature; }
-    public boolean isHabitable() { return habitable; }
+    public Map<String, Double> getCompositionAtmosphere() {
+        return compositionAtmosphere;
+    }
+
+    public double getPression() {
+        return pression;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
 }
