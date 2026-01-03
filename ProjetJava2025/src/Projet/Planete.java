@@ -2,7 +2,7 @@ package Projet;
 
 import java.util.Map;
 
-public class Planete extends Astre {
+public class Planete extends Astre implements Habitable {
 
     private Map<String, Double> compositionAtmosphere; // % des gaz
     private double pression;                            // en Pa
@@ -25,16 +25,27 @@ public class Planete extends Astre {
     }
 
     /* ===== Méthode d’habitalité simplifiée ===== */
+    @Override
     public boolean estHabitable() {
-        // Exemple simple : température entre 250K et 320K, pression > 50000 Pa
         if (temperature < 250 || temperature > 320) return false;
         if (pression < 50000 || pression > 200000) return false;
-        // Atmosphère doit contenir O2 > 15% et N2 > 50%
-        Double oxygene = compositionAtmosphere.getOrDefault("O2", 0.0);
-        Double azote = compositionAtmosphere.getOrDefault("N2", 0.0);
-        if (oxygene < 15.0 || azote < 50.0) return false;
 
-        return true;
+        double o2 = compositionAtmosphere.getOrDefault("O2", 0.0);
+        double n2 = compositionAtmosphere.getOrDefault("N2", 0.0);
+
+        return o2 > 15.0 && n2 > 50.0;
+    }
+
+    @Override
+    public double graviteSurface() {
+        // g = G*M / R²
+        final double G = 6.67430e-11;
+        return G * getMasse() / (getRayon() * getRayon());
+    }
+
+    @Override
+    public double temperatureSurface() {
+        return temperature;
     }
 
     /* ===== Surcharge force gravitationnelle si nécessaire ===== */

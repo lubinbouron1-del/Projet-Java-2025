@@ -52,22 +52,20 @@ public abstract class Astre {
     }
 
     protected Vecteur sommeForces() {
-        Vecteur somme = new Vecteur(0, 0, 0);
-        for (Vecteur f : forces) {
-            somme = somme.add(f);
-        }
-        return somme;
+        return forces.stream()
+                     .reduce(new Vecteur(0, 0, 0),
+                             (a, b) -> a.add(b));
+    
     }
 
     /* ===== Mise à jour physique (Euler) ===== */
     // On fournit une liste d'autres astres pour calcul des forces gravitationnelles
     public void update(double dt, List<Astre> autres) {
         // Calcul des forces gravitationnelles provenant des autres astres
-        for (Astre autre : autres) {
-            if (autre != this) {
-                ajouterForce(autre.forceGravitationnelle(this));
-            }
-        }
+    	autres.stream()
+        .filter(a -> a != this)
+        .map(a -> a.forceGravitationnelle(this))
+        .forEach(this::ajouterForce);
 
         // Euler
         Vecteur position = etat.getPosition();
