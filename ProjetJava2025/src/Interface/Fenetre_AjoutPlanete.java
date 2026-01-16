@@ -65,6 +65,7 @@ public class Fenetre_AjoutPlanete  extends JFrame implements ActionListener{
 	class ActionListener_zoneSaisie implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			DAO.ajouterElement(zoneSaisie.getText(), "planetes");
+			zoneSaisie.setText("");
 			JOptionPane.showMessageDialog(null, "Planète ajouter avec succès !\n Modifiez ses paramètres (nul par défaut) grâce au bouton associé.");
 		}
 	}

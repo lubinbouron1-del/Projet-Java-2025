@@ -16,9 +16,9 @@ import dao.DAO;
 public class Fenetre_SuppPlanete  extends JFrame implements ActionListener{
 	
 	 JLabel zoneTexte;
-	 JTextField zoneSaisie;
+	 JComboBox zoneChoix;
 	 JButton boutonOK;
-	
+	 
 	public Fenetre_SuppPlanete() {
 		setTitle("Création de planète");
 		setSize(300,300);
@@ -32,7 +32,7 @@ public class Fenetre_SuppPlanete  extends JFrame implements ActionListener{
 		panelAjout.setPreferredSize(new Dimension(300,300));
 		
 		zoneTexte = new JLabel("Saisir le nom de la planètes");
-		zoneSaisie = new JTextField("");
+		zoneSaisie = new JComboBox();
 		zoneSaisie.setPreferredSize(new Dimension(150,20));
 		zoneSaisie.addActionListener(new ActionListener_zoneSaisie());
 		boutonOK = new JButton("Ok");
