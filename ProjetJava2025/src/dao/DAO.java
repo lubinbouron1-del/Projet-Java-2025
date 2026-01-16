@@ -13,6 +13,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import Projet.Planete;
 import Projet.Vecteur;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -424,6 +425,41 @@ public class DAO {
 	    );
 	}
 
+	 public static ArrayList<String> getNomsPlanetes() {
+			Connection cn=null;
+			java.sql.Statement st = null;
+			ResultSet rs = null;
+			MysqlDataSource mysqlDS = new MysqlDataSource();
+			mysqlDS.setURL(url);
+			mysqlDS.setUser(login);
+			mysqlDS.setPassword(password);
+			try {
+				cn = mysqlDS.getConnection();
+			} 
+			catch (SQLException e1) {
+				System.err.println("Erreur de parcours de connexion");
+				e1.printStackTrace();
+			}
+	        ArrayList<String> planetes = new ArrayList<>();
+	        ArrayList<String> erreur = new ArrayList<>();
+	        
+
+	        
+			try {
+				st = cn.createStatement();
+				String sqlQuery = "SELECT nom FROM planetes";
+				rs = st.executeQuery(sqlQuery);
+				while(rs.next()) {
+					planetes.add(rs.getString("nom"));
+				}
+				return planetes;
+			}
+			catch(SQLException e) {
+				System.err.println("Erreur requete SQL");
+				e.printStackTrace();
+			}
+			return erreur;
+	    }
 
 
 
@@ -432,8 +468,6 @@ public class DAO {
 
 	public static void main(String[] args) {
 
-		double i = getTempSur("Soleil");
-		System.out.println(i);
 
 	}
 

@@ -16,7 +16,7 @@ import dao.DAO;
 public class Fenetre_SuppPlanete  extends JFrame implements ActionListener{
 	
 	 JLabel zoneTexte;
-	 JComboBox zoneChoix;
+	 JComboBox<String> zoneChoix;
 	 JButton boutonOK;
 	 
 	public Fenetre_SuppPlanete() {
@@ -31,10 +31,10 @@ public class Fenetre_SuppPlanete  extends JFrame implements ActionListener{
 		panelAjout.setBackground(Color.lightGray);
 		panelAjout.setPreferredSize(new Dimension(300,300));
 		
-		zoneTexte = new JLabel("Saisir le nom de la planètes");
-		zoneSaisie = new JComboBox();
-		zoneSaisie.setPreferredSize(new Dimension(150,20));
-		zoneSaisie.addActionListener(new ActionListener_zoneSaisie());
+		zoneTexte = new JLabel("Choisir la planètes à supprimer :");
+		zoneChoix = new JComboBox<>(DAO.getNomsPlanetes().toArray(new String[0]));
+		zoneChoix.setPreferredSize(new Dimension(150,20));
+		zoneChoix.addActionListener(new ActionListener_zoneChoix());
 		boutonOK = new JButton("Ok");
 		boutonOK.addActionListener(new ActionListener_Bouton());
 		
@@ -48,7 +48,7 @@ public class Fenetre_SuppPlanete  extends JFrame implements ActionListener{
 		gbc.gridy = 3;
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
-		panelAjout.add(zoneSaisie,gbc);
+		panelAjout.add(zoneChoix,gbc);
 		gbc.gridx = 3;
 		gbc.gridy = 5;
 		gbc.gridwidth = 1;
@@ -62,15 +62,11 @@ public class Fenetre_SuppPlanete  extends JFrame implements ActionListener{
 	}
 	
 	
-	class ActionListener_zoneSaisie implements ActionListener{
+	class ActionListener_zoneChoix implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			try {
-			DAO.suppElement(zoneSaisie.getText(), "planetes");
+			DAO.suppElement(zoneChoix.getSelectedItem().toString(), "planetes");
 			JOptionPane.showMessageDialog(null, "Planète supprimer avec succès !");
-			}
-			catch(Exception E) {
-				JOptionPane.showMessageDialog(null, "Cette planète n'existe déjà pas/plus.");
-			}
+			
 		}
 	}
 	class ActionListener_Bouton implements ActionListener{

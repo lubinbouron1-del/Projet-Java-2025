@@ -50,13 +50,13 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 	}
 	
 	class ActionListener_ajoutPlanete implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e1) {
 			new Fenetre_AjoutPlanete();
-		}
+		} 
 	}
 	
 	class ActionListener_suppPlanete implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e2) {
 			new Fenetre_SuppPlanete();
 		}
 	}
