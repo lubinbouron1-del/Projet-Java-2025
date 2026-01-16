@@ -409,7 +409,11 @@ public class DAO {
 	    Map<String, Double> atmosphere = new HashMap<>();
 	    String json = getComp_Atm(nom);
 
+<<<<<<< HEAD
 	    // Parsing simple (à améliorer plus tard)
+=======
+	   
+>>>>>>> branch 'main' of https://github.com/lubinbouron1-del/Projet-Java-2025.git
 	    if (json.contains("O2")) atmosphere.put("O2", 21.0);
 	    if (json.contains("N2")) atmosphere.put("N2", 78.0);
 
