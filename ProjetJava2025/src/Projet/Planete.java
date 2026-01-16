@@ -30,21 +30,18 @@ public class Planete extends Astre implements Habitable {
                 temperature >= 250 && temperature <= 320 &&
                 pression >= 50_000 && pression <= 200_000;
 
-        boolean atmosphereValide =
-                compositionAtmosphere.entrySet().stream()
-                        .filter(e -> e.getKey().equals("O2") || e.getKey().equals("N2"))
-                        .allMatch(e ->
-                                (e.getKey().equals("O2") && e.getValue() > 15.0) ||
-                                (e.getKey().equals("N2") && e.getValue() > 50.0)
-                        );
+        // Vérification explicite de O2 et N2
+        double o2 = compositionAtmosphere.getOrDefault("O2", 0.0);
+        double n2 = compositionAtmosphere.getOrDefault("N2", 0.0);
+        
+        boolean atmosphereValide = (o2 > 15.0) && (n2 > 50.0);
 
         return conditionsPhysiques && atmosphereValide;
     }
 
     @Override
     public double graviteSurface() {
-        final double G = 6.67430e-11;
-        return G * getMasse() / (getRayon() * getRayon());
+        return Constantes.G * getMasse() / (getRayon() * getRayon());
     }
 
     @Override
@@ -62,23 +59,38 @@ public class Planete extends Astre implements Habitable {
     @Override
     public void affiche() {
         System.out.println(
-            "Planète : masse=" + getMasse() +
-            ", rayon=" + getRayon() +
+            "Planète : masse=" + getMasse() + " kg" +
+            ", rayon=" + getRayon() + " m" +
             ", position=" + getEtat().getPosition() +
+            ", temp=" + temperature + " K" +
+            ", pression=" + pression + " Pa" +
             ", habitable=" + estHabitable()
         );
     }
 
-    /* ===== Getters ===== */
+    /* ===== Getters/Setters ===== */
     public Map<String, Double> getCompositionAtmosphere() {
         return compositionAtmosphere;
+    }
+    
+    // CORRECTION: Setter manquant ajouté
+    public void setCompositionAtmosphere(Map<String, Double> compositionAtmosphere) {
+        this.compositionAtmosphere = compositionAtmosphere;
     }
 
     public double getPression() {
         return pression;
     }
+    
+    public void setPression(double pression) {
+        this.pression = pression;
+    }
 
     public double getTemperature() {
         return temperature;
+    }
+    
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
     }
 }
