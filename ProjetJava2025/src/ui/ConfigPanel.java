@@ -37,7 +37,7 @@ public class ConfigPanel extends JPanel {
         btnPanel.add(appliquerBtn);
         add(btnPanel, BorderLayout.NORTH);
 
-        // Panel propriétés (AJOUT de posX et posY)
+        // Panel propriétés
         JPanel propPanel = new JPanel(new GridLayout(10, 2));
         propPanel.add(new JLabel("Masse (kg)")); masseField = new JTextField(); propPanel.add(masseField);
         propPanel.add(new JLabel("Rayon (m)")); rayonField = new JTextField(); propPanel.add(rayonField);
@@ -72,8 +72,6 @@ public class ConfigPanel extends JPanel {
     }
 
     private void ajouterPlanete() {
-        // CORRECTION: Calculer la vitesse orbitale correcte
-        
         // Trouver l'étoile dans le système
         Etoile etoile = null;
         for (Astre a : systeme.getAstres()) {
@@ -89,18 +87,17 @@ public class ConfigPanel extends JPanel {
         }
         
         // Position aléatoire autour de l'étoile
-        double distance = 1e11 + Math.random() * 2e11; // Entre 100M et 300M km
+        double distance = 1e11 + Math.random() * 2e11;
         double angle = Math.random() * 2 * Math.PI;
         
         double posX = distance * Math.cos(angle);
         double posY = distance * Math.sin(angle);
         
         // CALCUL DE LA VITESSE ORBITALE CIRCULAIRE
-        // v = sqrt(G * M / r)
         double G = 6.67430e-11;
         double vitesseOrbitale = Math.sqrt(G * etoile.getMasse() / distance);
         
-        // Vitesse perpendiculaire à la position (orbite circulaire)
+        // Vitesse perpendiculaire à la position
         double vx = -vitesseOrbitale * Math.sin(angle);
         double vy = vitesseOrbitale * Math.cos(angle);
         
@@ -110,10 +107,10 @@ public class ConfigPanel extends JPanel {
         atm.put("N2", 78.0);
 
         Planete p = new Planete(
-            5e24,                           // masse similaire à la Terre
-            6.4e6,                          // rayon similaire à la Terre
-            new Vecteur(posX, posY),        // position calculée
-            new Vecteur(vx, vy),            // vitesse orbitale calculée
+            5e24,
+            6.4e6,
+            new Vecteur(posX, posY),
+            new Vecteur(vx, vy),
             atm, 
             101_325, 
             288

@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 
 public class SimulationFrame extends JFrame {
+    
+    private static final double DT = 3600;        // 1 heure par pas
+    private static final int STEPS_PER_FRAME = 24; // 24 heures = 1 jour par frame
 
     public SimulationFrame(SystemeStellaire systeme) {
         setTitle("Simulation Système Stellaire");
@@ -19,11 +22,10 @@ public class SimulationFrame extends JFrame {
 
         setVisible(true);
 
-        // CORRECTION: Pas de temps beaucoup plus petit + timer plus rapide
-        new Timer(16, e -> {  // 16ms = ~60 FPS
-            // Faire plusieurs petits pas au lieu d'un gros
-            for (int i = 0; i < 100; i++) {
-                systeme.update(100); // 100 secondes par pas (au lieu de 0.01)
+        // 30 FPS, chaque frame = 1 jour de simulation
+        new Timer(33, e -> {
+            for (int i = 0; i < STEPS_PER_FRAME; i++) {
+                systeme.update(DT);
             }
             simPanel.repaint();
         }).start();
