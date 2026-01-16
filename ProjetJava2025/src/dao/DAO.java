@@ -253,7 +253,7 @@ public class DAO {
         System.out.println(i);
     }
 }
-=======
+
 		}
 	}
 
@@ -530,10 +530,10 @@ public class DAO {
 
 	}
 
-}
 
 
 
 
 
->>>>>>> branch 'main' of https://github.com/lubinbouron1-del/Projet-Java-2025
+
+
