@@ -73,7 +73,7 @@ public class Planete extends Astre implements Habitable {
         return compositionAtmosphere;
     }
     
-    // CORRECTION: Setter manquant ajouté
+  
     public void setCompositionAtmosphere(Map<String, Double> compositionAtmosphere) {
         this.compositionAtmosphere = compositionAtmosphere;
     }

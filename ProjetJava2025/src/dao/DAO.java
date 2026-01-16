@@ -1,6 +1,5 @@
 package dao;
 
-import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +10,6 @@ import Projet.Planete;
 import Projet.Vecteur;
 import Projet.Constantes;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DAO {
@@ -157,7 +155,7 @@ public class DAO {
             st.setString(1, nom);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                // CORRECTION: Conversion km → m
+                // Conversion km → m
                 return rs.getDouble("rayon_km") * Constantes.KM_TO_M;
             }
         } catch (SQLException e) {
@@ -220,8 +218,6 @@ public class DAO {
         double rayon = getRayon(nom, "planetes");
         double temperature = getTemp(nom);
         
-        System.out.println("Chargement planète " + nom + ": masse=" + masse + ", rayon=" + rayon + ", temp=" + temperature);
-        
         if (masse < 0 || rayon < 0 || temperature < 0) {
             System.err.println("Erreur: Planète '" + nom + "' introuvable dans la DB");
             return null;
@@ -230,6 +226,7 @@ public class DAO {
         Map<String, Double> atmosphere = new HashMap<>();
         String json = getComp_Atm(nom);
 
+        // Parsing JSON simple (pour un vrai parsing, utilisez Gson ou Jackson)
         if (json.contains("O2")) atmosphere.put("O2", 21.0);
         if (json.contains("N2")) atmosphere.put("N2", 78.0);
 
@@ -243,90 +240,8 @@ public class DAO {
             temperature
         );
     }
-   
-
-   
-
 
     public static void main(String[] args) {
-        double i = getTempSur("Soleil");
-        System.out.println(i);
+       
     }
-
-
-		
-	
-
-	
-
-
-	
-
-
-	
-
-	
-
-
-
-		
-
-
-	
-
-	
-	
-
-	 public static ArrayList<String> getNomsPlanetes() {
-			Connection cn=null;
-			java.sql.Statement st = null;
-			ResultSet rs = null;
-			MysqlDataSource mysqlDS = new MysqlDataSource();
-			mysqlDS.setURL(url);
-			mysqlDS.setUser(login);
-			mysqlDS.setPassword(password);
-			try {
-				cn = mysqlDS.getConnection();
-			} 
-			catch (SQLException e1) {
-				System.err.println("Erreur de parcours de connexion");
-				e1.printStackTrace();
-			}
-	        ArrayList<String> planetes = new ArrayList<>();
-	        ArrayList<String> erreur = new ArrayList<>();
-	        
-
-	        
-			try {
-				st = cn.createStatement();
-				String sqlQuery = "SELECT nom FROM planetes";
-				rs = st.executeQuery(sqlQuery);
-				while(rs.next()) {
-					planetes.add(rs.getString("nom"));
-				}
-				return planetes;
-			}
-			catch(SQLException e) {
-				System.err.println("Erreur requete SQL");
-				e.printStackTrace();
-			}
-			return erreur;
-	    }
 }
-
-
-
-
-
-	
-
-
-	
-
-
-
-
-
-
-
-
