@@ -409,7 +409,7 @@ public class DAO {
 	    Map<String, Double> atmosphere = new HashMap<>();
 	    String json = getComp_Atm(nom);
 
-	   
+	    // Parsing simple (à améliorer plus tard)
 	    if (json.contains("O2")) atmosphere.put("O2", 21.0);
 	    if (json.contains("N2")) atmosphere.put("N2", 78.0);
 
@@ -438,3 +438,8 @@ public class DAO {
 	}
 
 }
+
+
+
+
+

@@ -5,10 +5,15 @@ import java.util.List;
 public class Etoile extends Astre {
 
     private static final double G = 6.67430e-11; // Constante gravitationnelle
-
+    
+    private double temperatureSurface;
     /* ===== Constructeur ===== */
-    public Etoile(double masse, double rayon, Vecteur positionInitiale) {
+    public Etoile(double masse, double rayon, Vecteur positionInitiale, double temperatureSurface) {
         super(masse, rayon, positionInitiale, new Vecteur(0, 0, 0));
+        this.temperatureSurface = temperatureSurface;
+    }
+    public double getTemperatureSurface() {
+        return temperatureSurface;
     }
 
     /* ===== Force gravitationnelle ===== */
