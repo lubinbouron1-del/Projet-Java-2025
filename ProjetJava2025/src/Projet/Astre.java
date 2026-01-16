@@ -86,7 +86,7 @@ public abstract class Astre {
     /* ===== Méthodes abstraites ===== */
     public abstract void affiche();
     
-    
+    // À surcharger dans les sous-classes (ex: Etoile) si nécessaire
     public Vecteur forceGravitationnelle(Astre autre) {
         return new Vecteur(0, 0, 0); // Par défaut : aucune force
     }

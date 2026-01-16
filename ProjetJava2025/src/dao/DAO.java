@@ -247,242 +247,35 @@ public class DAO {
 
    
 
-<<<<<<< HEAD
+
     public static void main(String[] args) {
         double i = getTempSur("Soleil");
         System.out.println(i);
     }
-}
-
-		}
-	}
-
-	public static void addComp_Atm(String nom,String compo) {
-		Connection cn=null;
-		java.sql.Statement st = null;
-		ResultSet rs = null;
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL(url);
-		mysqlDS.setUser(login);
-		mysqlDS.setPassword(password);
-		try {
-			cn = mysqlDS.getConnection();
-		} 
-		catch (SQLException e1) {
-			System.err.println("Erreur de parcours de connexion");
-			e1.printStackTrace();
-		}
-		try {
-			st = cn.createStatement();
-			String sqlQuery = "UPDATE planetes SET comp_atm = JSON_ARRAY_APPEND(comp_atm, '$', '"+compo+"') WHERE nom = '"+nom+"'";
-			int i = st.executeUpdate(sqlQuery);
-		}
-		catch(SQLException e) {
-			System.err.println("Erreur requete SQL");
-			e.printStackTrace();
-
-		}
-	}
 
 
-	public static void suppComp_Atm(String nom,String compo) {
-		Connection cn=null;
-		java.sql.Statement st = null;
-		ResultSet rs = null;
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL(url);
-		mysqlDS.setUser(login);
-		mysqlDS.setPassword(password);
-		try {
-			cn = mysqlDS.getConnection();
-		} 
-		catch (SQLException e1) {
-			System.err.println("Erreur de parcours de connexion");
-			e1.printStackTrace();
-		}
-		try {
-			st = cn.createStatement();
-			String sqlQuery = "UPDATE planetes SET comp_atm = JSON_REMOVE(comp_atm,JSON_UNQUOTE(JSON_SEARCH(comp_atm, 'one', '"+compo+"')))WHERE nom = '"+nom+"'";
-			int i = st.executeUpdate(sqlQuery);
-		}
-		catch(SQLException e) {
-			System.err.println("Erreur requete SQL");
-			e.printStackTrace();
+		
+	
 
-		}
-	}
+	
 
 
-	public static double getMasse(String nom, String table) {
-		Connection cn=null;
-		java.sql.Statement st = null;
-		ResultSet rs = null;
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL(url);
-		mysqlDS.setUser(login);
-		mysqlDS.setPassword(password);
-		try {
-			cn = mysqlDS.getConnection();
-		} 
-		catch (SQLException e1) {
-			System.err.println("Erreur de parcours de connexion");
-			e1.printStackTrace();
-		}
-		try {
-			st = cn.createStatement();
-			String sqlQuery = "SELECT masse_kg FROM "+table+" WHERE nom = '"+nom+"'";
-			rs = st.executeQuery(sqlQuery);
-			if(rs.next())
-				return rs.getDouble("masse_kg");
-		}
-		catch(SQLException e) {
-			System.err.println("Erreur requete SQL");
-			e.printStackTrace();
-		}
-		return -1;
-	}	
+	
 
-	public static double getRayon(String nom, String table) {
-		Connection cn=null;
-		java.sql.Statement st = null;
-		ResultSet rs = null;
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL(url);
-		mysqlDS.setUser(login);
-		mysqlDS.setPassword(password);
-		try {
-			cn = mysqlDS.getConnection();
-		} 
-		catch (SQLException e1) {
-			System.err.println("Erreur de parcours de connexion");
-			e1.printStackTrace();
-		}
-		try {
-			st = cn.createStatement();
-			String sqlQuery = "SELECT rayon_km FROM "+table+" WHERE nom = '"+nom+"'";
-			rs = st.executeQuery(sqlQuery);
-			if(rs.next())
-				return rs.getDouble("rayon_km");
-		}
-		catch(SQLException e) {
-			System.err.println("Erreur requete SQL");
-			e.printStackTrace();
-		}
-		return -1;
-	}	
+
+	
+
+	
 
 
 
-	public static double getTemp(String nom) {
-		Connection cn=null;
-		java.sql.Statement st = null;
-		ResultSet rs = null;
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL(url);
-		mysqlDS.setUser(login);
-		mysqlDS.setPassword(password);
-		try {
-			cn = mysqlDS.getConnection();
-		} 
-		catch (SQLException e1) {
-			System.err.println("Erreur de parcours de connexion");
-			e1.printStackTrace();
-		}
-		try {
-			st = cn.createStatement();
-			String sqlQuery = "SELECT temperature FROM planetes WHERE nom = '"+nom+"'";
-			rs = st.executeQuery(sqlQuery);
-			if(rs.next())
-				return rs.getDouble("temperature");
-		}
-		catch(SQLException e) {
-			System.err.println("Erreur requete SQL");
-			e.printStackTrace();
-		}
-		return -1;
-	}	
+		
 
 
-	public static double getTempSur(String nom) {
-		Connection cn=null;
-		java.sql.Statement st = null;
-		ResultSet rs = null;
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL(url);
-		mysqlDS.setUser(login);
-		mysqlDS.setPassword(password);
-		try {
-			cn = mysqlDS.getConnection();
-		} 
-		catch (SQLException e1) {
-			System.err.println("Erreur de parcours de connexion");
-			e1.printStackTrace();
-		}
-		try {
-			st = cn.createStatement();
-			String sqlQuery = "SELECT temperature_surface FROM etoile WHERE nom = '"+nom+"'";
-			rs = st.executeQuery(sqlQuery);
-			if(rs.next())
-				return rs.getDouble("temperature_surface");
-		}
-		catch(SQLException e) {
-			System.err.println("Erreur requete SQL");
-			e.printStackTrace();
-		}
-		return -1;
-	}
+	
 
-	public static String getComp_Atm(String nom) {
-		Connection cn=null;
-		java.sql.Statement st = null;
-		ResultSet rs = null;
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL(url);
-		mysqlDS.setUser(login);
-		mysqlDS.setPassword(password);
-		try {
-			cn = mysqlDS.getConnection();
-		} 
-		catch (SQLException e1) {
-			System.err.println("Erreur de parcours de connexion");
-			e1.printStackTrace();
-		}
-		try {
-			st = cn.createStatement();
-			String sqlQuery = "SELECT comp_atm FROM planetes WHERE nom = '"+nom+"'";
-			rs = st.executeQuery(sqlQuery);
-			if(rs.next())
-				return rs.getString("comp_atm");
-		}
-		catch(SQLException e) {
-			System.err.println("Erreur requete SQL");
-			e.printStackTrace();
-		}
-		return "";
-	}	
-	public static Planete loadPlanete(String nom) {
-
-	    double masse = getMasse(nom, "planetes");
-	    double rayon = getRayon(nom, "planetes");
-	    double temperature = getTemp(nom);
-
-	    Map<String, Double> atmosphere = new HashMap<>();
-	    String json = getComp_Atm(nom);
-
-	   
-	    if (json.contains("O2")) atmosphere.put("O2", 21.0);
-	    if (json.contains("N2")) atmosphere.put("N2", 78.0);
-
-	    return new Planete(
-	        masse,
-	        rayon,
-	        new Vecteur(0, 0),
-	        new Vecteur(0, 0),
-	        atmosphere,
-	        101_325,
-	        temperature
-	    );
-	}
+	
+	
 
 	 public static ArrayList<String> getNomsPlanetes() {
 			Connection cn=null;
@@ -519,16 +312,16 @@ public class DAO {
 			}
 			return erreur;
 	    }
+}
 
 
 
 
 
+	
 
-	public static void main(String[] args) {
 
-
-	}
+	
 
 
 
