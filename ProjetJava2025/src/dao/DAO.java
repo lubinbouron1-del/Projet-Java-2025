@@ -218,25 +218,33 @@ public class DAO {
         double masse = getMasse(nom, "planetes");
         double rayon = getRayon(nom, "planetes");
         double temperature = getTemp(nom);
+        
+        System.out.println("Chargement planète " + nom + ": masse=" + masse + ", rayon=" + rayon + ", temp=" + temperature);
+        
+        if (masse < 0 || rayon < 0 || temperature < 0) {
+            System.err.println("Erreur: Planète '" + nom + "' introuvable dans la DB");
+            return null;
+        }
 
         Map<String, Double> atmosphere = new HashMap<>();
         String json = getComp_Atm(nom);
 
-        // CORRECTION: Parsing JSON amélioré
-        // Note: Pour un vrai parsing, utilisez Gson ou Jackson
         if (json.contains("O2")) atmosphere.put("O2", 21.0);
         if (json.contains("N2")) atmosphere.put("N2", 78.0);
 
         return new Planete(
             masse,
             rayon,
-            new Vecteur(0, 0),
-            new Vecteur(0, 0),
+            new Vecteur(1.496e11, 0),  // Position initiale
+            new Vecteur(0, 29780),     // Vitesse initiale
             atmosphere,
             101_325,
             temperature
         );
     }
+   
+
+   
 
     public static void main(String[] args) {
         double i = getTempSur("Soleil");

@@ -19,9 +19,12 @@ public class SimulationFrame extends JFrame {
 
         setVisible(true);
 
-        // Boucle de simulation simple
-        new Timer(50, e -> {
-            systeme.update(1); // dt = 1s
+        // CORRECTION: Pas de temps beaucoup plus petit + timer plus rapide
+        new Timer(16, e -> {  // 16ms = ~60 FPS
+            // Faire plusieurs petits pas au lieu d'un gros
+            for (int i = 0; i < 100; i++) {
+                systeme.update(100); // 100 secondes par pas (au lieu de 0.01)
+            }
             simPanel.repaint();
         }).start();
     }
